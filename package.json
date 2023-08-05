@@ -4,5 +4,16 @@
     "mineflayer-pathfinder": "^2.4.4",
     "mineflayer-pvp": "^1.3.2",
     "prismarine-viewer": "^1.25.0"
-  }
+  },
+  "name": "mcbot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "node main.js"
+  },
+  "keywords": ["nodejs","minecraft","bot","barritone"],
+  "author": "crischutu07",
+  "license": "ISC",
+  "description": "A Minecraft Bot coded with Node.js and using mineflayer package"
 }
