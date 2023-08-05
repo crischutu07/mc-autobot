@@ -16,12 +16,17 @@ npm run test
 Configuring code by access to `config.json` files
 ## View Bot with HTTP
 If you want view your bot in http, turning on `useHTTP` to `true`
+
 `useHTTP` - boolean (**false**-true)
+
 `httpPort` - number (1-65575)
 
 ## Setting up user
 `username` - string (Your username)
+`email` - string (Email for `mojang`)
+`password` - string (Password for `mojang`)
 `auth` - string (microsoft-mojang-**offline**)
+
 ## Connecting to the Server
 `serverHost` - strings (IP Server)
 `port` - number (1-65575)
