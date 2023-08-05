@@ -14,10 +14,12 @@ function resetLog(){
   console.log('\x1b\[0m')
 }
 const mineflayerViewer = require('prismarine-viewer').mineflayer
-const { botUsername, auth, portHost, serverHost, useHTTP, firstPerson, httpPort } = require("./config.json");
+const { email, password, botUsername, auth, portHost, serverHost, useHTTP, firstPerson, httpPort } = require("./config.json");
 var newbotUsername = botUsername
 const bot_options = {
   username: newbotUsername,
+  email: email,
+  passowrd: password,
   host: serverHost,
   port: portHost,
   auth: auth
