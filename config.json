@@ -3,7 +3,7 @@
   "portHost": 25565,
   
   "httpPort": 80,
-  "useHTTP": true,
+  "useHTTP": false,
   "firstPerson": true,
   
   "botUsername": "Steve",
