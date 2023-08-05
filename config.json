@@ -1,6 +1,9 @@
 {
-    "serverHost": "example.com",
-    "portHost": 25565,
-    "botUsername": "Steve",
-    "auth": "offline"
+  "httpPort": 80,
+  "serverHost": "example.com",
+  "portHost": 25565,
+  "botUsername": "Steve",
+  "auth": "offline"
+  "useHTTP": true,
+  "firstPerson": true
 }
