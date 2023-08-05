@@ -1,6 +1,6 @@
 const mineflayer = require('mineflayer');
 const readline = require('readline');
-var rejoin = false
+var rejoin = false // doesn't work
 function redLog(args){
   console.log('\x1b[31m' + args)
 }
@@ -14,8 +14,7 @@ function resetLog(){
   console.log('\x1b\[0m')
 }
 const mineflayerViewer = require('prismarine-viewer').mineflayer
-var port = 80;
-const { botUsername, auth, portHost, serverHost, useHTTP, firstPerson } = require("./config.json");
+const { botUsername, auth, portHost, serverHost, useHTTP, firstPerson, httpPort } = require("./config.json");
 var newbotUsername = botUsername
 const bot_options = {
   username: newbotUsername,
@@ -29,7 +28,7 @@ console.log(`Prepare joining as ${newbotUsername}`);
 bot.on('login', () => {
   console.log("Eliabished to the server");
   if (useHTTP = true){
-  mineflayerViewer(bot, { port: port, firstPerson: firstPerson })
+  mineflayerViewer(bot, { port: httpPort, firstPerson: firstPerson })
   }
 })
 bot.on('spawn', () => {
