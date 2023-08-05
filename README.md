@@ -1,5 +1,5 @@
 # mc-autobot
-Minecraft Bot using Node.js with`mineflayer` 
+Minecraft Bot using Node.js with `mineflayer` 
 
 # Installation
 Get the lastest Node.js and install `git`, you can use `winget` to install or use your favorite linux package manager to install
@@ -12,3 +12,16 @@ You can run the `main.js` if you want to use them as an non-functional NPC for t
 ```bash
 npm run test
 ```
+# Configuration
+Configuring code by access to `config.json` files
+## View Bot with HTTP
+If you want view your bot in http, turning on `useHTTP` to `true`
+`useHTTP` - boolean (**false**-true)
+`httpPort` - number (1-65575)
+
+## Setting up user
+`username` - string (Your username)
+`auth` - string (microsoft-mojang-**offline**)
+## Connecting to the Server
+`serverHost` - strings (IP Server)
+`port` - number (1-65575)
