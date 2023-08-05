@@ -1,9 +1,14 @@
 {
-  "httpPort": 80,
   "serverHost": "example.com",
   "portHost": 25565,
-  "botUsername": "Steve",
-  "auth": "offline"
+  
+  "httpPort": 80,
   "useHTTP": true,
-  "firstPerson": true
+  "firstPerson": true,
+  
+  "botUsername": "Steve",
+  "email": "example@example.com",
+  "password": "ExamplePassword123",
+  
+  "auth": "offline"
 }
