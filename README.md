@@ -23,10 +23,14 @@ If you want view your bot in http, turning on `useHTTP` to `true`
 
 ## Setting up user
 `username` - string (Your username)
+
 `email` - string (Email for `mojang`)
+
 `password` - string (Password for `mojang`)
+
 `auth` - string (microsoft-mojang-**offline**)
 
 ## Connecting to the Server
 `serverHost` - strings (IP Server)
+
 `port` - number (1-65575)
