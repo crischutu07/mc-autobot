@@ -10,5 +10,5 @@ npm install mineflayer mineflayer-pvp mineflayer-pathfinder prismarine-viewer
 ```
 You can run the `main.js` if you want to use them as an non-functional NPC for testing 2 other files, run them by using this command:
 ```bash
-node main.js
+npm run test
 ```
