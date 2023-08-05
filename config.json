@@ -1,0 +1,6 @@
+{
+    "serverHost": "example.com",
+    "portHost": 25565,
+    "botUsername": "Steve",
+    "auth": "offline"
+}
