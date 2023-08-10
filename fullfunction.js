@@ -5,9 +5,7 @@ const { GoalBlock, GoalNear } = require('mineflayer-pathfinder').goals
 const pvp = require('mineflayer-pvp').plugin
 const armorManager = require("mineflayer-armor-manager")
 // const mineflayerViewer = require('prismarine-viewer').mineflayer
-const { botOwner, serverHost, portHost, auth } = require("./config.json");
-const randomNum = Math.floor(Math.random() * 1024)
-var botUsername = "AbsoluteSolver"
+const { botUsername, serverHost, portHost, auth } = require("./config.json");
 const botuser = botUsername;
 //function joinServer(){
   const bot = mineflayer.createBot({ 
