@@ -1,35 +1,42 @@
-/* ===[ HOW TO USE ]===
-Commands:
-come <string> - come to user planned pos (come Steve, or if you are Steve and run "come" it will comes like "come Steve")
-attack <string> - attack username
-guard <string> - guard planned pos within 16 block (NOT IMPLENTED)
-*/
 const mineflayer = require('mineflayer')
 const pathfinder = require('mineflayer-pathfinder').pathfinder
 const Movements = require('mineflayer-pathfinder').Movements
 const { GoalBlock, GoalNear } = require('mineflayer-pathfinder').goals
 const pvp = require('mineflayer-pvp').plugin
+const armorManager = require("mineflayer-armor-manager")
 // const mineflayerViewer = require('prismarine-viewer').mineflayer
-const { botOwner, serverHost, portHost, auth, botUsername } = require("./config.json");
+const { botOwner, serverHost, portHost, auth } = require("./config.json");
 const randomNum = Math.floor(Math.random() * 1024)
+var botUsername = "AbsoluteSolver"
 const botuser = botUsername;
-const bot = mineflayer.createBot({ 
-  username: botUsername,
-  host: serverHost,
-  port: portHost,
-  auth: auth
-})
-
+//function joinServer(){
+  const bot = mineflayer.createBot({ 
+    username: botUsername,
+    host: serverHost,
+    port: portHost,
+    auth: auth
+  })
+//}
+//joinServer()
 bot.loadPlugin(pathfinder)
 bot.loadPlugin(pvp)
+bot.loadPlugin(armorManager);
 
 let guardPos = null;
 let movingToGuardPos = null;
+var playerList = [];
 
-bot.on('join', () => {
-  console.log("Eliabished the server, preparing to join...")
-})
-
+function playerCheck(string){
+  if (!string){
+    return "Can't find any players or empty variables:"
+  } else if (playerList.lastIndexOf(string) == botUsername){
+    return false;
+  } else if (playerList.lastIndexOf(string) !== -1){
+    return playerList[playerList.lastIndexOf(string)];
+  } else {
+    return false;
+  }
+}
 async function moveToGuardPos () {
   if (movingToGuardPos) return
   // console.info('Moving to guard pos')
@@ -37,7 +44,7 @@ async function moveToGuardPos () {
   bot.pathfinder.setMovements(new Movements(bot, mcData))
   try {
     movingToGuardPos = true;
-    await bot.pathfinder.goto(new goals.GoalNear(guardPos.x, guardPos.y, guardPos.z, 2))
+    await bot.pathfinder.goto(new GoalNear(guardPos.x, guardPos.y, guardPos.z, 2))
     movingToGuardPos = false
   } catch (err) {
     // Catch errors when pathfinder is interrupted by the pvp plugin or if pathfinder cannot find a path
@@ -61,10 +68,16 @@ async function stopGuarding () {
   guardPos = null
   await bot.pvp.stop()
 }
+bot.on('join', () => {
+  console.log("Eliabished the server, preparing to join...")
+})
 
 bot.on('spawn', () => {
 //  mineflayerViewer(bot, { port: 3000, firstPerson: true, viewDistance: 1 })
-  const botcoord = bot.players[botUsername].entity;
+  const botcoord = bot.player.entity;
+  const num = bot.health
+  bot.armorManager.equipAll()
+  console.log(`Bot health: ${num}`)
   console.log("Spawned in the server.")
   console.log(`Coordinate: ${botcoord.position}`)
 })
@@ -89,11 +102,12 @@ bot.on('physicTick', async () => {
 })
 bot.on('chat', function(username, message) { // chat event
   console.log(`[${username}] ${message}`)
-  const cmd = message.split(' ')[0]
-
+  const cmd = message.split(/\s+/g)[0];
+  if (username === bot.username) return;
+  var cmdList = ['come','guard','playerCheck','attack', 'debug']
   if (cmd === 'come') {
     const defaultMove = new Movements(bot);
-    const player = message.split(' ')[1];;
+    const player = message.split(/\s+/g)[1];
     if (!player){
         console.warn(`Get into ${username} without using 'player' arguments.`)    
         const nonTarget = bot.players[username].entity
@@ -139,7 +153,7 @@ bot.on('chat', function(username, message) { // chat event
       bot.chat("I can't see you.")
       return
     }
-    if (stop == true){
+    if (stop == "stop"){
       stopGuarding()
     }
 
@@ -147,13 +161,34 @@ bot.on('chat', function(username, message) { // chat event
     // Copy the players Vec3 position and guard it
     guardArea(player.entity.position.clone())
   }
-
+  if (cmd == "playerCheck"){
+    const targetPlayers = message.split(/\s+/g)[1];
+    const results = playerCheck(targetPlayers);
+    if (results == false){
+      bot.chat("Player does not exist or empty arguments.")
+      return;
+    }
+    bot.chat(results)
+    return;
+  }
+  if (cmd == "goto"){
+    const posx = message.split(/\s+/g)[1];
+    const posy = message.split(/\s+/g)[2];
+    const posz = message.split(/\s+/g)[3];
+    if (!isNaN(posx) || !isNaN(posy) || !isNaN(posz) ){
+      bot.chat("not a number or empty")
+      console.log("Invaild or not a integer (number)"); return;
+    }
+    const defaultMove = new Movements(bot);
+    bot.pathfinder.setMovements(defaultMove);
+    bot.pathfinder.setGoal(new GoalBlock(posx, posy, posz))
+  }
   if (cmd == "attack"){
   const defaultMove = new Movements(bot);
-  const attackTarget = message.split(' ')[1];
+  const attackTarget = message.split(/\s+/g)[1];
     console.log(`${username} Triggering 'attack' function`)
       if (attackTarget == ''){
-        bot.chat("attack <attackTarget/stop>")
+        bot.chat(`@${username}` + " attack <attackTarget/stop>")
         console.warn("cmd=attack Requires 1 more argument")
         return;
       }
@@ -168,10 +203,10 @@ bot.on('chat', function(username, message) { // chat event
       defaultMove.placeCost = 0;
       defaultMove.digCost = 0;
       defaultMove.canOpenDoors = true;
+      defaultMove.allowFreeMotion = false;
       const player = bot.players[attackTarget];
       bot.pvp.attack(player.entity)
       bot.on("stoppedAttacking", () => {
-        bot.pvp.stop()
         if (guardPos) {
           moveToGuardPos()
         }
@@ -190,6 +225,25 @@ bot.on('path_reset', (reason) => {
   console.log("path_reset: ", reason)
 })
 bot.on('goal_reached', () => {
-  bot.chat("Goal reached")
   console.debug("Reached Movements goal.")
 })
+bot.on('playerJoined', (player) => {
+  playerList.push(player.username)
+});
+bot.on('playerLeft', (entity) => {
+  playerList.splice(playerList.lastIndexOf(entity.username), 1)
+})
+bot.on('error', (err) => {
+  console.error(`Error: ${err}`)
+  process.exit(1)
+})
+bot.on('kicked', (reason) => {
+  console.warn(`Kicked: ${reason.text}`)
+  process.exit(1)
+})
+bot.on('end', (reason => {
+  console.warn(reason)
+  process.exit(0)
+}))
+//bot.on('end', () => joinServer())
+// 225 lines
