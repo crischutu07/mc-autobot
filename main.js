@@ -17,13 +17,12 @@ function resetLog(){
 }
 const mineflayerViewer = require('prismarine-viewer').headless
 var port = 80;
-const { auth, portHost, serverHost } = require("./config.json");
+const { auth, portHost, serverHost, botUsername } = require("./config.json");
 //const newbotUsername = `${botUsername}` + Math.floor(Math.random() * 1000)
 var botUsername = "SussyBaka421"
 //var botUsername = ""
-let newbotUsername = botUsername
 const bot_options = {
-  username: newbotUsername,
+  username: botUsername,
   host: serverHost,
   port: portHost,
   auth: auth,
@@ -34,9 +33,9 @@ function playerCheck(string) {
   if (Object.keys(bot.players).includes(string)) return true
   else return false
 }
-var botuser = newbotUsername; // fix cant define username
+var botuser = botUsername; // fix cant define username
 const bot = mineflayer.createBot(bot_options)
-console.log(`Prepare joining as ${newbotUsername}`);
+console.log(`Prepare joining as ${botUsername}`);
 bot.on('login', () => {
   console.log("Eliabished to the server");
 //  mineflayerViewer(bot, { port: port, firstPerson: true }) // ????
@@ -44,7 +43,7 @@ bot.on('login', () => {
 var playerList = []
 
 bot.on('spawn', () => {
-  const botInfomation = bot.players[botuser].entity
+  const botInfomation = bot.player.entity
   const idk = bot.player.username
   console.log(idk)
 //  bot.chat("/login botbot002&")
